@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.model;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.UUID;
 
 @Getter @Setter
@@ -11,6 +12,6 @@ public class Product {
     private int productQuantity;
 
     public Product() {
-        this.productId = UUID.randomUUID().toString(); // Auto-generate unique ID
+        this.productId = UUID.randomUUID().toString();
     }
 }

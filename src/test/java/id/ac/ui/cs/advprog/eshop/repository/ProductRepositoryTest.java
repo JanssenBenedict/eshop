@@ -68,6 +68,12 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void testFindNonExistentProduct() {
+        Product result = productRepository.findById("11111111-1111-1111-1111-111111111111");
+        assertNull(result);
+    }
+
+    @Test
     void testEditProductPositive() {
         Product product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
@@ -91,7 +97,7 @@ class ProductRepositoryTest {
         Product updatedProduct = new Product();
         updatedProduct.setProductId("11111111-1111-1111-1111-111111111111");
         updatedProduct.setProductName("Unmade Object");
-        updatedProduct.setProductQuantity(0);
+        updatedProduct.setProductQuantity(1);
 
         Product result = productRepository.update(updatedProduct);
         assertNull(result);
@@ -111,7 +117,45 @@ class ProductRepositoryTest {
 
     @Test
     void testDeleteProductNegative() {
-        productRepository.delete("11111111-1111-1111-1111-111111111111");
-        assertNull(productRepository.findById("11111111-1111-1111-1111-111111111111"));
+        assertDoesNotThrow(() -> productRepository.delete("11111111-1111-1111-1111-111111111111"));
+    }
+
+    @Test
+    void testCreateProductWithNullOrEmptyName() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        assertThrows(IllegalArgumentException.class, () -> product.setProductName(null));
+        assertThrows(IllegalArgumentException.class, () -> product.setProductName("  "));
+    }
+
+    @Test
+    void testCreateProductWithZeroOrNegativeQuantity() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("A Product");
+        assertThrows(IllegalArgumentException.class, () -> product.setProductQuantity(-10));
+    }
+
+    @Test
+    void testEditProductWithNullOrEmptyName() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("A Product");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        assertThrows(IllegalArgumentException.class, () -> product.setProductName(null));
+        assertThrows(IllegalArgumentException.class, () -> product.setProductName("  "));
+    }
+
+    @Test
+    void testEditProductWithZeroOrNegativeQuantity() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("A Product");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        assertThrows(IllegalArgumentException.class, () -> product.setProductQuantity(0));
     }
 }

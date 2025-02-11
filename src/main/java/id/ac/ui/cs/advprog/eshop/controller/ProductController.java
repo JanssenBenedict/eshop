@@ -25,6 +25,17 @@ public class ProductController {
 
     @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model) {
+
+        if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
+            model.addAttribute("error", "The name of the product cannot be empty or null");
+            return "createProduct";
+        }
+
+        if (product.getProductQuantity() < 1) {
+            model.addAttribute("error", "The product quantity cannot be negative or zero");
+            return "createProduct";
+        }
+
         service.create(product);
         return "redirect:list";
     }
@@ -33,14 +44,26 @@ public class ProductController {
     public String editProductPage(@PathVariable String productId, Model model) {
         Product product = service.findById(productId);
         if (product == null) {
-            return "redirect:/product/list";
+            model.addAttribute("error", "The product cannot be found");
+            return "productList";
         }
         model.addAttribute("product", product);
-        return "EditProduct";
+        return "editProduct";
     }
 
     @PostMapping("/edit")
-    public String editProductPost(@ModelAttribute Product product) {
+    public String editProductPost(@ModelAttribute Product product, Model model) {
+
+        if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
+            model.addAttribute("error", "The name of the product cannot be empty or null");
+            return "editProduct";
+        }
+
+        if (product.getProductQuantity() < 1) {
+            model.addAttribute("error", "The product quantity cannot be negative or zero");
+            return "editProduct";
+        }
+
         service.update(product);
         return "redirect:/product/list";
     }
@@ -53,7 +76,14 @@ public class ProductController {
     }
 
     @GetMapping("/delete/{productId}")
-    public String deleteProduct(@PathVariable String productId) {
+    public String deleteProduct(@PathVariable String productId, Model model) {
+
+        Product product = service.findById(productId);
+        if (product == null) {
+            model.addAttribute("error", "The product cannot be not found");
+            return "productList";
+        }
+
         service.delete(productId);
         return "redirect:/product/list";
     }

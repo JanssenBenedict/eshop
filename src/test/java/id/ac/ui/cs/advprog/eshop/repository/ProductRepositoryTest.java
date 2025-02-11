@@ -66,4 +66,52 @@ class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
     }
+
+    @Test
+    void testEditProductPositive() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Some Object");
+        product.setProductQuantity(1000);
+        productRepository.create(product);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        updatedProduct.setProductName("Other Object");
+        updatedProduct.setProductQuantity(10000);
+
+        Product result = productRepository.update(updatedProduct);
+        assertNotNull(result);
+        assertEquals("Other Object", result.getProductName());
+        assertEquals(10000, result.getProductQuantity());
+    }
+
+    @Test
+    void testEditProductNegative() {
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("11111111-1111-1111-1111-111111111111");
+        updatedProduct.setProductName("Unmade Object");
+        updatedProduct.setProductQuantity(0);
+
+        Product result = productRepository.update(updatedProduct);
+        assertNull(result);
+    }
+
+    @Test
+    void testDeleteProductPositive() {
+        Product product = new Product();
+        product.setProductId("a0f9de46-90b1-437d-a0bf-d0821dde9096");
+        product.setProductName("Misc. Object");
+        product.setProductQuantity(1);
+        productRepository.create(product);
+
+        productRepository.delete("a0f9de46-90b1-437d-a0bf-d0821dde9096");
+        assertNull(productRepository.findById("a0f9de46-90b1-437d-a0bf-d0821dde9096"));
+    }
+
+    @Test
+    void testDeleteProductNegative() {
+        productRepository.delete("11111111-1111-1111-1111-111111111111");
+        assertNull(productRepository.findById("11111111-1111-1111-1111-111111111111"));
+    }
 }

@@ -8,18 +8,23 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import jakarta.validation.*;
+import java.util.Set;
 import java.util.Iterator;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductRepositoryTest {
+
+    private Validator validator;
 
     @InjectMocks
     ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @Test
@@ -122,10 +127,21 @@ class ProductRepositoryTest {
 
     @Test
     void testCreateProductWithNullOrEmptyName() {
-        Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        assertThrows(IllegalArgumentException.class, () -> product.setProductName(null));
-        assertThrows(IllegalArgumentException.class, () -> product.setProductName("  "));
+        Product product1 = new Product();
+        product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product1.setProductName(null);
+        product1.setProductQuantity(10);
+
+        Set<ConstraintViolation<Product>> violationA = validator.validate(product1);
+        assertFalse(violationA.isEmpty());
+
+        Product product2 = new Product();
+        product2.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product2.setProductName("  ");
+        product2.setProductQuantity(10);
+
+        Set<ConstraintViolation<Product>> violationB = validator.validate(product2);
+        assertFalse(violationB.isEmpty());
     }
 
     @Test
@@ -133,7 +149,10 @@ class ProductRepositoryTest {
         Product product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("A Product");
-        assertThrows(IllegalArgumentException.class, () -> product.setProductQuantity(-10));
+        product.setProductQuantity(-10);
+
+        Set<ConstraintViolation<Product>> violation = validator.validate(product);
+        assertFalse(violation.isEmpty());
     }
 
     @Test
@@ -144,8 +163,13 @@ class ProductRepositoryTest {
         product.setProductQuantity(100);
         productRepository.create(product);
 
-        assertThrows(IllegalArgumentException.class, () -> product.setProductName(null));
-        assertThrows(IllegalArgumentException.class, () -> product.setProductName("  "));
+        product.setProductName(null);
+        Set<ConstraintViolation<Product>> violationA = validator.validate(product);
+        assertFalse(violationA.isEmpty());
+
+        product.setProductName("  ");
+        Set<ConstraintViolation<Product>> violationB = validator.validate(product);
+        assertFalse(violationB.isEmpty());
     }
 
     @Test
@@ -156,6 +180,8 @@ class ProductRepositoryTest {
         product.setProductQuantity(100);
         productRepository.create(product);
 
-        assertThrows(IllegalArgumentException.class, () -> product.setProductQuantity(0));
+        product.setProductQuantity(0);
+        Set<ConstraintViolation<Product>> violation = validator.validate(product);
+        assertFalse(violation.isEmpty());
     }
 }

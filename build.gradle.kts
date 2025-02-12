@@ -33,6 +33,7 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	testImplementation("org.seleniumhq.selenium:selenium-java:$seleniumJavaVersion")
 	testImplementation("io.github.bonigarcia:selenium-jupiter:$seleniumJupiterVersion")
 	testImplementation("io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion")

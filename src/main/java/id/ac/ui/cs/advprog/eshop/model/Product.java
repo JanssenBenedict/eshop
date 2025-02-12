@@ -5,27 +5,20 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
+
 @Getter @Setter
 public class Product {
     private String productId;
+
+    @NotBlank(message = "Product name is required")
     private String productName;
+
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int productQuantity;
 
     public Product() {
         this.productId = UUID.randomUUID().toString();
-    }
-
-    public void setProductName(String productName) {
-        if (productName == null || productName.trim().isEmpty()) {
-            throw new IllegalArgumentException("The name of the product cannot be empty or null");
-        }
-        this.productName = productName;
-    }
-
-    public void setProductQuantity(int productQuantity) {
-        if (productQuantity < 1) {
-            throw new IllegalArgumentException("The product quantity cannot be negative or zero");
-        }
-        this.productQuantity = productQuantity;
     }
 }

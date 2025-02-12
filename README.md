@@ -21,7 +21,7 @@ I have successfully implemented two new features using Spring Boot and applied t
 
 # Reflection 2
 
-I have successfully implemented unit tests and functional tests that are used to validate certain actions in the program, such as creating products, editing product properties, deleting products, and properly accessing certain pages.
+I have successfully implemented unit tests and functional tests that are used to validate certain actions in the program, such as creating products, editing product properties, deleting products, and properly accessing certain pages along with validating their contents.
 
 ## My Thoughts after Unit Test Creation
 1. After writing my own unit tests, I feel more confident in my code's integrity, as said code has passed the unit tests that I have created.

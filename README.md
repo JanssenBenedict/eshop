@@ -11,12 +11,12 @@ I have successfully implemented two new features using Spring Boot and applied t
 1. Meaningful Names: I have made sure to avoid using variable, class, and method names that don't properly indicate their true purposes. I chose names that are pronounceable and easy to comprehend. For example, each class' name accurately represents their purpose, such as ProductController, ProductRepository, ProductService, and others. The methods also use meaningful names that properly show their intent, like createProductPage, productListPage, editProductPost, and more.
 2. Function: Each method or function created does only one thing well. I also made sure their names are short and correspond to their specific purposes. For example, the ProductService and ProductServiceImpl classes have separate methods for creating a product (create), updating a product's properties (update), deleting a product (delete), finding all products (findAll), and finding a specific product through its ID (findById). Each method does one specific thing and they do it well.
 3. Objects and Data Structure: Certain properties or variables, such as the properties in the Product class or model, are kept private, so they won't be directly exposed to other users. I have also utilized data structures in the code, such as the productData list on the ProductRepository class to store all the created Product objects.
-4. Error Handling: I have implemented proper error handling through the usage of Try-Catch statements and unchecked exceptions, such as IllegalArgumentException and ResponseStatusException, in the Product model class and the ProductController class. Besides that, to avoid redundancy in the code, I created and implemented a method that's sole purpose is to validate the properties of a Product object (productValidation).
+4. Error Handling: I have implemented proper error handling through the usage of Jakarta Bean Validation in the Product model class and the ProductController class. I have also made sure that the HTML templates properly display messages to the users regarding what error occurred due to their inputs.
 
 ## Applied Secure Coding Practices
 
-1. Output Data Encoding: The HTML templates I made utilize Thymeleaf, hence they automatically escape inputs from users properly and prevent certain vulnerabilities, such as XSS (cross-site scripting) attacks.
-
+1. Output Data Encoding: The HTML templates I made utilize Thymeleaf, hence they automatically escape outputs properly and prevent certain vulnerabilities, such as XSS (cross-site scripting) attacks.
+2. Input Data Validation: The input data has already been properly validated in order to not encounter certain vulnerabilities, such as XSS (cross-site scripting) attacks or SQL code injections.
 # Reflection 2
 
 ## My Thoughts after Unit Test Creation

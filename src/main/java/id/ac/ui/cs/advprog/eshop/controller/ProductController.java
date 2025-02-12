@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -26,15 +28,13 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String createProductPost(@ModelAttribute Product product, Model model) {
-        try {
-            productValidation(product);
-            service.create(product);
-            return "redirect:list";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
+    public String createProductPost(@Valid @ModelAttribute Product product, BindingResult result, Model model) {
+        if (result.hasErrors()) {
             return "createProduct";
         }
+
+        service.create(product);
+        return "redirect:/product/list";
     }
 
     @GetMapping("/edit/{productId}")
@@ -48,15 +48,13 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String editProductPost(@ModelAttribute Product product, Model model) {
-        try {
-            productValidation(product);
-            service.update(product);
-            return "redirect:/product/list";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
+    public String editProductPost(@Valid @ModelAttribute Product product, BindingResult result, Model model) {
+        if (result.hasErrors()) {
             return "editProduct";
         }
+
+        service.update(product);
+        return "redirect:/product/list";
     }
 
     @GetMapping("/list")

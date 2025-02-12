@@ -1,6 +1,6 @@
-Name: Janssen Benedict
-Class: Pemrograman Lanjut A
-NPM: 2306152102
+- Name: Janssen Benedict
+- Class: Pemrograman Lanjut A
+- NPM: 2306152102
 
 # Reflection 1
 
@@ -12,12 +12,16 @@ I have successfully implemented two new features using Spring Boot and applied t
 2. Function: Each method or function created does only one thing well. I also made sure their names are short and correspond to their specific purposes. For example, the ProductService and ProductServiceImpl classes have separate methods for creating a product (create), updating a product's properties (update), deleting a product (delete), finding all products (findAll), and finding a specific product through its ID (findById). Each method does one specific thing and they do it well.
 3. Objects and Data Structure: Certain properties or variables, such as the properties in the Product class or model, are kept private, so they won't be directly exposed to other users. I have also utilized data structures in the code, such as the productData list on the ProductRepository class to store all the created Product objects.
 4. Error Handling: I have implemented proper error handling through the usage of Jakarta Bean Validation in the Product model class and the ProductController class. I have also made sure that the HTML templates properly display messages to the users regarding what error occurred due to their inputs.
+5. Comments: As of right now, due to the simplistic code structure and implementation, as well as the variables, classes, and methods already using meaningful names that already describe their purposes well, comments are currently excluded from this current tutorial.
 
 ## Applied Secure Coding Practices
 
 1. Output Data Encoding: The HTML templates I made utilize Thymeleaf, hence they automatically escape outputs properly and prevent certain vulnerabilities, such as XSS (cross-site scripting) attacks.
 2. Input Data Validation: The input data has already been properly validated in order to not encounter certain vulnerabilities, such as XSS (cross-site scripting) attacks or SQL code injections.
+
 # Reflection 2
+
+I have successfully implemented unit tests and functional tests that are used to validate certain actions in the program, such as creating products, editing product properties, deleting products, and properly accessing certain pages.
 
 ## My Thoughts after Unit Test Creation
 1. After writing my own unit tests, I feel more confident in my code's integrity, as said code has passed the unit tests that I have created.
@@ -27,5 +31,5 @@ I have successfully implemented two new features using Spring Boot and applied t
 
 ## Creating a New Functional Test Suite
 If I were to create a new functional test suite that verifies the number of items in the product list through a new Java class similar to the prior functional test suites with the same setup procedures and instance variables, it would result in unnecessary code duplication.
-The code of the new functional test suite will reduce the code quality due to the duplication of the code making my program code redundant.
+The code of the new functional test suite will indeed reduce the code quality due to the duplication of the code making my program repetitive or redundant.
 To resolve this, the duplication of my code must be eliminated. Instead, I can write a new base functional test suite with the same setup procedures and instance variables, then have the functional test suits that utilize those procedures and variables extend that base Java class.

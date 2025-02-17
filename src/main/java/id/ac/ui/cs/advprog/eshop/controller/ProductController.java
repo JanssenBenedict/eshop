@@ -73,15 +73,4 @@ public class ProductController {
         service.delete(productId);
         return "redirect:/product/list";
     }
-
-    private void productValidation(Product product) {
-
-        if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
-            throw new IllegalArgumentException("The name of the product cannot be empty or null");
-        }
-
-        if (product.getProductQuantity() < 1) {
-            throw new IllegalArgumentException("The product quantity cannot be negative or zero");
-        }
-    }
 }

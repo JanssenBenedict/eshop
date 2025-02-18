@@ -41,7 +41,7 @@ class ProductControllerTest {
     void testCreateProductPage() throws Exception {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("createProduct"))
+                .andExpect(view().name("CreateProduct"))
                 .andExpect(model().attributeExists("product"));
     }
 
@@ -66,7 +66,7 @@ class ProductControllerTest {
                         .param("productQuantity", "0")
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("createProduct"))
+                .andExpect(view().name("CreateProduct"))
                 .andExpect(model().attributeHasFieldErrors("product", "productName", "productQuantity"));
 
         verify(service, never()).create(Mockito.any(Product.class));
@@ -78,7 +78,7 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/edit/eb558e9f-1c39-460e-8860-71af6af63bd6"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("editProduct"))
+                .andExpect(view().name("EditProduct"))
                 .andExpect(model().attributeExists("product"))
                 .andExpect(model().attribute("product", product));
     }
@@ -122,7 +122,7 @@ class ProductControllerTest {
                         .param("productQuantity", "0")
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("editProduct"))
+                .andExpect(view().name("EditProduct"))
                 .andExpect(model().attributeHasFieldErrors("product", "productName", "productQuantity"));
 
         verify(service, never()).update(Mockito.any(Product.class));
@@ -165,7 +165,7 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productList"))
+                .andExpect(view().name("ProductList"))
                 .andExpect(model().attributeExists("products"))
                 .andExpect(model().attribute("products", hasSize(2)))
                 .andExpect(model().attribute("products", is(Arrays.asList(product1, product2))));

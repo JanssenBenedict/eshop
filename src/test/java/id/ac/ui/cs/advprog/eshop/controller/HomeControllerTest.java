@@ -17,7 +17,7 @@ class HomeControllerTest {
     void testHome() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("homePage"))
+                .andExpect(view().name("HomePage"))
                 .andExpect(model().attribute("title", "ADV Shop"))
                 .andExpect(model().attribute("welcomeMessage", "Welcome"));
     }

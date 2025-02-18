@@ -11,6 +11,6 @@ public class HomeController {
     public String home(Model model) {
         model.addAttribute("title", "ADV Shop");
         model.addAttribute("welcomeMessage", "Welcome");
-        return "homePage";
+        return "HomePage";
     }
 }

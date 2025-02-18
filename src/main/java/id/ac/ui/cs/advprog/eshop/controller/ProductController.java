@@ -24,13 +24,13 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
-        return "createProduct";
+        return "CreateProduct";
     }
 
     @PostMapping("/create")
     public String createProductPost(@Valid @ModelAttribute Product product, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "createProduct";
+            return "CreateProduct";
         }
 
         service.create(product);
@@ -44,13 +44,13 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The product cannot be found");
         }
         model.addAttribute("product", product);
-        return "editProduct";
+        return "EditProduct";
     }
 
     @PostMapping("/edit")
     public String editProductPost(@Valid @ModelAttribute Product product, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "editProduct";
+            return "EditProduct";
         }
 
         service.update(product);
@@ -61,7 +61,7 @@ public class ProductController {
     public String productListPage(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productList";
+        return "ProductList";
     }
 
     @GetMapping("/delete/{productId}")

@@ -184,4 +184,32 @@ class ProductRepositoryTest {
         Set<ConstraintViolation<Product>> violation = validator.validate(product);
         assertFalse(violation.isEmpty());
     }
+
+    @Test
+    void testEditManyProducts() {
+        Product product1 = new Product();
+        product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd7");
+        product1.setProductName("Product1");
+        product1.setProductQuantity(111);
+        productRepository.create(product1);
+
+        Product product2 = new Product();
+        product2.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd8");
+        product2.setProductName("Product2");
+        product2.setProductQuantity(222);
+        productRepository.create(product2);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd8");
+        updatedProduct.setProductName("Second Product");
+        updatedProduct.setProductQuantity(2222);
+
+        Product result = productRepository.update(updatedProduct);
+        assertNotNull(result);
+        assertEquals("Second Product", result.getProductName());
+        assertEquals(2222, result.getProductQuantity());
+
+        assertEquals("Product1", productRepository
+                .findById("eb558e9f-1c39-460e-8860-71af6af63bd7").getProductName());
+    }
 }

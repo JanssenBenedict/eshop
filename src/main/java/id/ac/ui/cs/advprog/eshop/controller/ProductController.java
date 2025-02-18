@@ -24,13 +24,13 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
-        return "createProduct";
+        return "CreateProduct";
     }
 
     @PostMapping("/create")
     public String createProductPost(@Valid @ModelAttribute Product product, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "createProduct";
+            return "CreateProduct";
         }
 
         service.create(product);
@@ -44,13 +44,13 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The product cannot be found");
         }
         model.addAttribute("product", product);
-        return "editProduct";
+        return "EditProduct";
     }
 
     @PostMapping("/edit")
     public String editProductPost(@Valid @ModelAttribute Product product, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "editProduct";
+            return "EditProduct";
         }
 
         service.update(product);
@@ -61,7 +61,7 @@ public class ProductController {
     public String productListPage(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productList";
+        return "ProductList";
     }
 
     @GetMapping("/delete/{productId}")
@@ -72,16 +72,5 @@ public class ProductController {
         }
         service.delete(productId);
         return "redirect:/product/list";
-    }
-
-    private void productValidation(Product product) {
-
-        if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
-            throw new IllegalArgumentException("The name of the product cannot be empty or null");
-        }
-
-        if (product.getProductQuantity() < 1) {
-            throw new IllegalArgumentException("The product quantity cannot be negative or zero");
-        }
     }
 }

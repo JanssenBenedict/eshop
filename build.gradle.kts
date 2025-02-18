@@ -8,6 +8,7 @@ plugins {
 	jacoco
 	id("org.springframework.boot") version "3.4.2"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("org.sonarqube") version "6.0.1.5171"
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -45,6 +46,14 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+sonar {
+	properties {
+		property("sonar.projectKey", "JanssenBenedict_eshop")
+		property("sonar.organization", "janssen1827364525")
+		property("sonar.host.url", "https://sonarcloud.io")
+	}
 }
 
 tasks.register<Test>("unitTest") {

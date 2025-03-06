@@ -86,10 +86,10 @@ public class PaymentTest {
         Payment no8NumericalCharsPayment = new Payment(
                 PaymentMethod.VOUCHER.name(), no8NumericalCharsPaymentData, this.order);
 
-        assertEquals(PaymentStatus.REJECTED, lessThan16CharsPayment.getStatus());
-        assertEquals(PaymentStatus.REJECTED, moreThan16CharsPayment.getStatus());
-        assertEquals(PaymentStatus.REJECTED, noESHOPAtStartPayment.getStatus());
-        assertEquals(PaymentStatus.REJECTED, no8NumericalCharsPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), lessThan16CharsPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), moreThan16CharsPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), noESHOPAtStartPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), no8NumericalCharsPayment.getStatus());
     }
 
     @Test
@@ -113,10 +113,10 @@ public class PaymentTest {
         Payment emptyReferenceCodePayment = new Payment(
                 PaymentMethod.BANK_TRANSFER.name(), emptyReferenceCodePaymentData, this.order);
 
-        assertEquals(PaymentStatus.REJECTED, nullBankNamePayment.getStatus());
-        assertEquals(PaymentStatus.REJECTED, nullReferenceCodePayment.getStatus());
-        assertEquals(PaymentStatus.REJECTED, emptyBankNamePayment.getStatus());
-        assertEquals(PaymentStatus.REJECTED, emptyReferenceCodePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), nullBankNamePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), nullReferenceCodePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), emptyBankNamePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), emptyReferenceCodePayment.getStatus());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class PaymentTest {
                 PaymentMethod.VOUCHER.name(), this.voucherCodePaymentData, this.order);
 
         assertNotNull(payment.getId(), "Payment ID cannot be null");
-        assertEquals(PaymentStatus.PENDING, payment.getStatus());
+        assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
         assertSame(this.voucherCodePaymentData, payment.getPaymentData());
         assertSame(this.order, payment.getOrder());
     }
@@ -136,7 +136,7 @@ public class PaymentTest {
                 PaymentMethod.BANK_TRANSFER.name(), this.bankTransferPaymentData, this.order);
 
         assertNotNull(payment.getId(), "Payment ID cannot be null");
-        assertEquals(PaymentStatus.PENDING, payment.getStatus());
+        assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
         assertSame(this.bankTransferPaymentData, payment.getPaymentData());
         assertSame(this.order, payment.getOrder());
     }

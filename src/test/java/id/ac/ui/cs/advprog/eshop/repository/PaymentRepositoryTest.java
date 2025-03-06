@@ -18,7 +18,6 @@ import java.util.Map;
 class PaymentRepositoryTest {
 
     PaymentRepository paymentRepository;
-    List<Payment> payments;
     List<Product> products;
     Order order;
     Map<String, String> voucherCodePaymentData;

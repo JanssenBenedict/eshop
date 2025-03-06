@@ -47,14 +47,14 @@ public class PaymentTest {
     @Test
     void testCreatePaymentWithNoOrder() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment(PaymentMethod.VOUCHER.name(), this.voucherCodePaymentData, null);
+            new Payment(PaymentMethod.VOUCHER.getValue(), this.voucherCodePaymentData, null);
         });
     }
 
     @Test
     void testCreatePaymentWithNoPaymentData() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment(PaymentMethod.VOUCHER.name(), null, this.order);
+            new Payment(PaymentMethod.VOUCHER.getValue(), null, this.order);
         });
     }
 
@@ -78,13 +78,13 @@ public class PaymentTest {
         no8NumericalCharsPaymentData.put("voucherCode", "ESHOPABCDEFGHIJK");
 
         Payment lessThan16CharsPayment = new Payment(
-                PaymentMethod.VOUCHER.name(), lessThan16CharsPaymentData, this.order);
+                PaymentMethod.VOUCHER.getValue(), lessThan16CharsPaymentData, this.order);
         Payment moreThan16CharsPayment = new Payment(
-                PaymentMethod.VOUCHER.name(), moreThan16CharsPaymentData, this.order);
+                PaymentMethod.VOUCHER.getValue(), moreThan16CharsPaymentData, this.order);
         Payment noESHOPAtStartPayment = new Payment(
-                PaymentMethod.VOUCHER.name(), noESHOPAtStartPaymentData, this.order);
+                PaymentMethod.VOUCHER.getValue(), noESHOPAtStartPaymentData, this.order);
         Payment no8NumericalCharsPayment = new Payment(
-                PaymentMethod.VOUCHER.name(), no8NumericalCharsPaymentData, this.order);
+                PaymentMethod.VOUCHER.getValue(), no8NumericalCharsPaymentData, this.order);
 
         assertEquals(PaymentStatus.REJECTED.getValue(), lessThan16CharsPayment.getStatus());
         assertEquals(PaymentStatus.REJECTED.getValue(), moreThan16CharsPayment.getStatus());
@@ -105,13 +105,13 @@ public class PaymentTest {
         emptyReferenceCodePaymentData.put("referenceCode", "");
 
         Payment nullBankNamePayment = new Payment(
-                PaymentMethod.BANK_TRANSFER.name(), nullBankNamePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.getValue(), nullBankNamePaymentData, this.order);
         Payment nullReferenceCodePayment = new Payment(
-                PaymentMethod.BANK_TRANSFER.name(), nullReferenceCodePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.getValue(), nullReferenceCodePaymentData, this.order);
         Payment emptyBankNamePayment = new Payment(
-                PaymentMethod.BANK_TRANSFER.name(), emptyBankNamePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.getValue(), emptyBankNamePaymentData, this.order);
         Payment emptyReferenceCodePayment = new Payment(
-                PaymentMethod.BANK_TRANSFER.name(), emptyReferenceCodePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.getValue(), emptyReferenceCodePaymentData, this.order);
 
         assertEquals(PaymentStatus.REJECTED.getValue(), nullBankNamePayment.getStatus());
         assertEquals(PaymentStatus.REJECTED.getValue(), nullReferenceCodePayment.getStatus());
@@ -122,7 +122,7 @@ public class PaymentTest {
     @Test
     void testCreateVoucherCodePaymentPending() {
         Payment payment = new Payment(
-                PaymentMethod.VOUCHER.name(), this.voucherCodePaymentData, this.order);
+                PaymentMethod.VOUCHER.getValue(), this.voucherCodePaymentData, this.order);
 
         assertNotNull(payment.getId(), "Payment ID cannot be null");
         assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
@@ -133,7 +133,7 @@ public class PaymentTest {
     @Test
     void testCreateBankTransferPaymentPending() {
         Payment payment = new Payment(
-                PaymentMethod.BANK_TRANSFER.name(), this.bankTransferPaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.getValue(), this.bankTransferPaymentData, this.order);
 
         assertNotNull(payment.getId(), "Payment ID cannot be null");
         assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
@@ -144,7 +144,7 @@ public class PaymentTest {
     @Test
     void testSetInvalidPaymentStatus() {
         Payment payment = new Payment(
-                PaymentMethod.VOUCHER.name(), this.voucherCodePaymentData, this.order);
+                PaymentMethod.VOUCHER.getValue(), this.voucherCodePaymentData, this.order);
 
         assertThrows(IllegalArgumentException.class, () -> {
             payment.setStatus("IDK");

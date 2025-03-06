@@ -32,7 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void setStatus(Payment payment, String status) {
+    public Payment setStatus(Payment payment, String status) {
         if (!PaymentStatus.contains(status)) {
             throw new IllegalArgumentException("Invalid payment status: ");
         }
@@ -42,6 +42,7 @@ public class PaymentServiceImpl implements PaymentService {
         } else if (status.equals(PaymentStatus.REJECTED.getValue())) {
             payment.getOrder().setStatus(OrderStatus.FAILED.getValue());
         }
+        return payment;
     }
 
 

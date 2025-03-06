@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface PaymentService {
     Payment addPayment(Order order, String method, Map<String, String> paymentData);
-    void setStatus(Payment payment, String status);
+    Payment setStatus(Payment payment, String status);
     Payment getPayment(String paymentId);
     List<Payment> getAllPayments();
 }

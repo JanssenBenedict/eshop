@@ -20,7 +20,7 @@ public class PaymentRepository {
         return payment;
     }
 
-    public void setStatus(Payment payment, String status) {
+    public Payment setStatus(Payment payment, String status) {
         if (!PaymentStatus.contains(status)) {
             throw new IllegalArgumentException();
         }
@@ -30,6 +30,7 @@ public class PaymentRepository {
         } else {
             payment.getOrder().setStatus(OrderStatus.FAILED.getValue());
         }
+        return payment;
     }
 
     public Payment getPayment(String id) {

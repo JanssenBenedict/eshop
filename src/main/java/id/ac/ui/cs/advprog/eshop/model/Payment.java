@@ -1,16 +1,17 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
 @Getter
 public class Payment {
     private String id;
-    private String method;
-    private String status;
+    private PaymentMethod method;
+    private PaymentStatus status;
     private Map<String, String> paymentData;
     private Order order;
 
@@ -20,20 +21,16 @@ public class Payment {
         this.setPaymentData(paymentData);
 
         if (order == null) {
-            throw new IllegalArgumentException();
-        } else {
-            this.order = order;
+            throw new IllegalArgumentException("Order cannot be null");
         }
+        this.order = order;
     }
 
     public void setMethod(String method) {
-        String[] methodList = {"VOUCHER", "BANK_TRANSFER"};
-
-        if (Arrays.asList(methodList).contains(method)) {
-            this.method = method;
-        } else {
-            throw new IllegalArgumentException();
+        if (method == null || !PaymentMethod.contains(method)) {
+            throw new IllegalArgumentException("Invalid payment method");
         }
+        this.method = PaymentMethod.valueOf(method);
     }
 
     public void setPaymentData(Map<String, String> paymentData) {
@@ -41,11 +38,11 @@ public class Payment {
             throw new IllegalArgumentException("Payment data cannot be null");
         }
 
-        if ("VOUCHER".equals(this.method)) {
+        if (this.method == PaymentMethod.VOUCHER) {
             String voucherCode = paymentData.get("voucherCode");
-            if (voucherCode == null || voucherCode.length() != 16 ||
-                    !(voucherCode.startsWith("ESHOP"))) {
-                this.status = "REJECTED";
+            if (voucherCode == null || voucherCode.length() != 16
+                    || !voucherCode.startsWith("ESHOP")) {
+                this.status = PaymentStatus.REJECTED;
             } else {
                 int counter = 0;
                 for (int i = 0; i < voucherCode.length(); i++) {
@@ -54,32 +51,29 @@ public class Payment {
                     }
                 }
                 if (counter == 8) {
-                    this.status = "PENDING";
+                    this.status = PaymentStatus.PENDING;
                 } else {
-                    this.status = "REJECTED";
+                    this.status = PaymentStatus.REJECTED;
                 }
             }
-        } else if ("BANK_TRANSFER".equals(this.method)) {
+        } else if (this.method == PaymentMethod.BANK_TRANSFER) {
             String bankName = paymentData.get("bankName");
             String referenceCode = paymentData.get("referenceCode");
 
-            if (bankName == null || bankName.isEmpty() ||
-                    referenceCode == null || referenceCode.isEmpty()) {
-                this.status = "REJECTED";
+            if (bankName == null || bankName.isEmpty()
+                    || referenceCode == null || referenceCode.isEmpty()) {
+                this.status = PaymentStatus.REJECTED;
             } else {
-                this.status = "PENDING";
+                this.status = PaymentStatus.PENDING;
             }
         }
         this.paymentData = paymentData;
     }
 
     public void setStatus(String status) {
-        String[] statusList = {"PENDING", "SUCCESS", "REJECTED"};
-
-        if (Arrays.asList(statusList).contains(status)) {
-            this.status = status;
-        } else {
-            throw new IllegalArgumentException();
+        if (status == null || !PaymentStatus.contains(status)) {
+            throw new IllegalArgumentException("Invalid payment status");
         }
+        this.status = PaymentStatus.valueOf(status);
     }
 }

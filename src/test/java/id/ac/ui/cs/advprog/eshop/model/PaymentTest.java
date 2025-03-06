@@ -1,7 +1,10 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -44,14 +47,14 @@ public class PaymentTest {
     @Test
     void testCreatePaymentWithNoOrder() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("VOUCHER", this.voucherCodePaymentData, null);
+            new Payment(PaymentMethod.VOUCHER.name(), this.voucherCodePaymentData, null);
         });
     }
 
     @Test
     void testCreatePaymentWithNoPaymentData() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("VOUCHER", null, this.order);
+            new Payment(PaymentMethod.VOUCHER.name(), null, this.order);
         });
     }
 
@@ -75,18 +78,18 @@ public class PaymentTest {
         no8NumericalCharsPaymentData.put("voucherCode", "ESHOPABCDEFGHIJK");
 
         Payment lessThan16CharsPayment = new Payment(
-                "VOUCHER", lessThan16CharsPaymentData, this.order);
+                PaymentMethod.VOUCHER.name(), lessThan16CharsPaymentData, this.order);
         Payment moreThan16CharsPayment = new Payment(
-                "VOUCHER", moreThan16CharsPaymentData, this.order);
+                PaymentMethod.VOUCHER.name(), moreThan16CharsPaymentData, this.order);
         Payment noESHOPAtStartPayment = new Payment(
-                "VOUCHER", noESHOPAtStartPaymentData, this.order);
+                PaymentMethod.VOUCHER.name(), noESHOPAtStartPaymentData, this.order);
         Payment no8NumericalCharsPayment = new Payment(
-                "VOUCHER", no8NumericalCharsPaymentData, this.order);
+                PaymentMethod.VOUCHER.name(), no8NumericalCharsPaymentData, this.order);
 
-        assertEquals("REJECTED", lessThan16CharsPayment.getStatus());
-        assertEquals("REJECTED", moreThan16CharsPayment.getStatus());
-        assertEquals("REJECTED", noESHOPAtStartPayment.getStatus());
-        assertEquals("REJECTED", no8NumericalCharsPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, lessThan16CharsPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, moreThan16CharsPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, noESHOPAtStartPayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, no8NumericalCharsPayment.getStatus());
     }
 
     @Test
@@ -102,27 +105,27 @@ public class PaymentTest {
         emptyReferenceCodePaymentData.put("referenceCode", "");
 
         Payment nullBankNamePayment = new Payment(
-                "BANK_TRANSFER", nullBankNamePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.name(), nullBankNamePaymentData, this.order);
         Payment nullReferenceCodePayment = new Payment(
-                "BANK_TRANSFER", nullReferenceCodePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.name(), nullReferenceCodePaymentData, this.order);
         Payment emptyBankNamePayment = new Payment(
-                "BANK_TRANSFER", emptyBankNamePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.name(), emptyBankNamePaymentData, this.order);
         Payment emptyReferenceCodePayment = new Payment(
-                "BANK_TRANSFER", emptyReferenceCodePaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.name(), emptyReferenceCodePaymentData, this.order);
 
-        assertEquals("REJECTED", nullBankNamePayment.getStatus());
-        assertEquals("REJECTED", nullReferenceCodePayment.getStatus());
-        assertEquals("REJECTED", emptyBankNamePayment.getStatus());
-        assertEquals("REJECTED", emptyReferenceCodePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, nullBankNamePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, nullReferenceCodePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, emptyBankNamePayment.getStatus());
+        assertEquals(PaymentStatus.REJECTED, emptyReferenceCodePayment.getStatus());
     }
 
     @Test
     void testCreateVoucherCodePaymentPending() {
         Payment payment = new Payment(
-                "VOUCHER", this.voucherCodePaymentData, this.order);
+                PaymentMethod.VOUCHER.name(), this.voucherCodePaymentData, this.order);
 
         assertNotNull(payment.getId(), "Payment ID cannot be null");
-        assertEquals("PENDING", payment.getStatus());
+        assertEquals(PaymentStatus.PENDING, payment.getStatus());
         assertSame(this.voucherCodePaymentData, payment.getPaymentData());
         assertSame(this.order, payment.getOrder());
     }
@@ -130,10 +133,10 @@ public class PaymentTest {
     @Test
     void testCreateBankTransferPaymentPending() {
         Payment payment = new Payment(
-                "BANK_TRANSFER", this.bankTransferPaymentData, this.order);
+                PaymentMethod.BANK_TRANSFER.name(), this.bankTransferPaymentData, this.order);
 
         assertNotNull(payment.getId(), "Payment ID cannot be null");
-        assertEquals("PENDING", payment.getStatus());
+        assertEquals(PaymentStatus.PENDING, payment.getStatus());
         assertSame(this.bankTransferPaymentData, payment.getPaymentData());
         assertSame(this.order, payment.getOrder());
     }
@@ -141,7 +144,7 @@ public class PaymentTest {
     @Test
     void testSetInvalidPaymentStatus() {
         Payment payment = new Payment(
-                "VOUCHER", this.voucherCodePaymentData, this.order);
+                PaymentMethod.VOUCHER.name(), this.voucherCodePaymentData, this.order);
 
         assertThrows(IllegalArgumentException.class, () -> {
             payment.setStatus("IDK");

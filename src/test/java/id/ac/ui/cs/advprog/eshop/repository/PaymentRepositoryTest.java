@@ -134,7 +134,7 @@ class PaymentRepositoryTest {
     }
 
     @Test
-    void testAddInvalidPayments() {
+    void testAddInvalidBankTransferPayments() {
         Map<String, String> nullBankNamePaymentData = new HashMap<>();
         Map<String, String> nullReferenceCodePaymentData = new HashMap<>();
         Map<String, String> emptyBankNamePaymentData = new HashMap<>();
@@ -145,15 +145,23 @@ class PaymentRepositoryTest {
         emptyBankNamePaymentData.put("bankName", "");
         emptyReferenceCodePaymentData.put("referenceCode", "");
 
-        Payment nullBankNamePayment = paymentRepository.addPayment(
-                order, PaymentMethod.BANK_TRANSFER.getValue(), nullBankNamePaymentData);
-        Payment nullReferenceCodePayment = paymentRepository.addPayment(
-                order, PaymentMethod.BANK_TRANSFER.getValue(), nullReferenceCodePaymentData);
-        Payment emptyBankNamePayment = paymentRepository.addPayment(
-                order, PaymentMethod.BANK_TRANSFER.getValue(), emptyBankNamePaymentData);
-        Payment emptyReferenceCodePayment = paymentRepository.addPayment(
-                order, PaymentMethod.BANK_TRANSFER.getValue(), emptyReferenceCodePaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.BANK_TRANSFER.getValue(), nullBankNamePaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.BANK_TRANSFER.getValue(), nullReferenceCodePaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.BANK_TRANSFER.getValue(), emptyBankNamePaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.BANK_TRANSFER.getValue(), emptyReferenceCodePaymentData);
 
+        boolean rejectedStatuses = true;
+        for (Payment payment : paymentRepository.getAllPayments()) {
+            if (!(payment.getStatus().equals(PaymentStatus.REJECTED.getValue()))) {
+                rejectedStatuses = false;
+                break;
+            }
+        }
+        assertTrue(rejectedStatuses);
+    }
+
+    @Test
+    void testAddInvalidVoucherCodePayments() {
         Map<String, String> lessThan16CharsPaymentData = new HashMap<>();
         Map<String, String> moreThan16CharsPaymentData = new HashMap<>();
         Map<String, String> noESHOPAtStartPaymentData = new HashMap<>();
@@ -164,14 +172,10 @@ class PaymentRepositoryTest {
         noESHOPAtStartPaymentData.put("voucherCode", "ABCDE123ABC45678");
         no8NumericalCharsPaymentData.put("voucherCode", "ESHOPABCDEFGHIJK");
 
-        Payment lessThan16CharsPayment = paymentRepository.addPayment(
-                order, PaymentMethod.VOUCHER.getValue(), lessThan16CharsPaymentData);
-        Payment moreThan16CharsPayment = paymentRepository.addPayment(
-                order, PaymentMethod.VOUCHER.getValue(), moreThan16CharsPaymentData);
-        Payment noESHOPAtStartPayment = paymentRepository.addPayment(
-                order, PaymentMethod.VOUCHER.getValue(), noESHOPAtStartPaymentData);
-        Payment no8NumericalCharsPayment = paymentRepository.addPayment(
-                order, PaymentMethod.VOUCHER.getValue(), no8NumericalCharsPaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.VOUCHER.getValue(), lessThan16CharsPaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.VOUCHER.getValue(), moreThan16CharsPaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.VOUCHER.getValue(), noESHOPAtStartPaymentData);
+        paymentRepository.addPayment(order, PaymentMethod.VOUCHER.getValue(), no8NumericalCharsPaymentData);
 
         boolean rejectedStatuses = true;
         for (Payment payment : paymentRepository.getAllPayments()) {

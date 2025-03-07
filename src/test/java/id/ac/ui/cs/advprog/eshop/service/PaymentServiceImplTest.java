@@ -115,15 +115,25 @@ public class PaymentServiceImplTest {
 
         assertEquals(actualPayment.getStatus(), PaymentStatus.PENDING.getValue());
 
-        Payment changedPayment = paymentService.setStatus(actualPayment, PaymentStatus.SUCCESS.getValue());
-        assertEquals(PaymentStatus.SUCCESS.getValue(), changedPayment.getStatus());
-        assertEquals(PaymentMethod.VOUCHER.getValue(), changedPayment.getMethod());
-        assertEquals(OrderStatus.SUCCESS.getValue(), changedPayment.getOrder().getStatus());
+        Payment modifiedPayment = new Payment(PaymentMethod.VOUCHER.getValue(), voucherCodePaymentData, order);
 
-        changedPayment = paymentService.setStatus(actualPayment, PaymentStatus.REJECTED.getValue());
-        assertEquals(PaymentStatus.REJECTED.getValue(), changedPayment.getStatus());
-        assertEquals(PaymentMethod.VOUCHER.getValue(), changedPayment.getMethod());
-        assertEquals(OrderStatus.FAILED.getValue(), changedPayment.getOrder().getStatus());
+        modifiedPayment.setStatus(PaymentStatus.SUCCESS.getValue());
+        modifiedPayment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
+        doReturn(modifiedPayment).when(paymentRepository).setStatus(actualPayment, PaymentStatus.SUCCESS.getValue());
+
+        Payment modifiedActualPayment = paymentService.setStatus(actualPayment, PaymentStatus.SUCCESS.getValue());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), modifiedActualPayment.getStatus());
+        assertEquals(PaymentMethod.VOUCHER.getValue(), modifiedActualPayment.getMethod());
+        assertEquals(OrderStatus.SUCCESS.getValue(), modifiedActualPayment.getOrder().getStatus());
+
+        modifiedPayment.setStatus(PaymentStatus.REJECTED.getValue());
+        modifiedPayment.getOrder().setStatus(OrderStatus.FAILED.getValue());
+        doReturn(modifiedPayment).when(paymentRepository).setStatus(actualPayment, PaymentStatus.REJECTED.getValue());
+
+        modifiedActualPayment = paymentService.setStatus(actualPayment, PaymentStatus.REJECTED.getValue());
+        assertEquals(PaymentStatus.REJECTED.getValue(), modifiedActualPayment.getStatus());
+        assertEquals(PaymentMethod.VOUCHER.getValue(), modifiedActualPayment.getMethod());
+        assertEquals(OrderStatus.FAILED.getValue(), modifiedActualPayment.getOrder().getStatus());
     }
 
     @Test
@@ -135,15 +145,25 @@ public class PaymentServiceImplTest {
 
         assertEquals(actualPayment.getStatus(), PaymentStatus.PENDING.getValue());
 
-        Payment changedPayment = paymentService.setStatus(actualPayment, PaymentStatus.SUCCESS.getValue());
-        assertEquals(PaymentStatus.SUCCESS.getValue(), changedPayment.getStatus());
-        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), changedPayment.getMethod());
-        assertEquals(OrderStatus.SUCCESS.getValue(), changedPayment.getOrder().getStatus());
+        Payment modifiedPayment = new Payment(PaymentMethod.BANK_TRANSFER.getValue(), bankTransferPaymentData, order);
 
-        changedPayment = paymentService.setStatus(actualPayment, PaymentStatus.REJECTED.getValue());
-        assertEquals(PaymentStatus.REJECTED.getValue(), changedPayment.getStatus());
-        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), changedPayment.getMethod());
-        assertEquals(OrderStatus.FAILED.getValue(), changedPayment.getOrder().getStatus());
+        modifiedPayment.setStatus(PaymentStatus.SUCCESS.getValue());
+        modifiedPayment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
+        doReturn(modifiedPayment).when(paymentRepository).setStatus(actualPayment, PaymentStatus.SUCCESS.getValue());
+
+        Payment modifiedActualPayment = paymentService.setStatus(actualPayment, PaymentStatus.SUCCESS.getValue());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), modifiedActualPayment.getStatus());
+        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), modifiedActualPayment.getMethod());
+        assertEquals(OrderStatus.SUCCESS.getValue(), modifiedActualPayment.getOrder().getStatus());
+
+        modifiedPayment.setStatus(PaymentStatus.REJECTED.getValue());
+        modifiedPayment.getOrder().setStatus(OrderStatus.FAILED.getValue());
+        doReturn(modifiedPayment).when(paymentRepository).setStatus(actualPayment, PaymentStatus.REJECTED.getValue());
+
+        modifiedActualPayment = paymentService.setStatus(actualPayment, PaymentStatus.REJECTED.getValue());
+        assertEquals(PaymentStatus.REJECTED.getValue(), modifiedActualPayment.getStatus());
+        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), modifiedActualPayment.getMethod());
+        assertEquals(OrderStatus.FAILED.getValue(), modifiedActualPayment.getOrder().getStatus());
     }
 
     @Test
@@ -174,9 +194,9 @@ public class PaymentServiceImplTest {
     void testGetPaymentFound() {
         Payment payment = payments.getFirst();
         doReturn(payment).when(paymentRepository).addPayment(order, PaymentMethod.VOUCHER.getValue(), voucherCodePaymentData);
+        doReturn(payment).when(paymentRepository).getPayment(payment.getId());
 
         Payment wantedPayment = paymentService.addPayment(order, PaymentMethod.VOUCHER.getValue(), voucherCodePaymentData);
-        doReturn(wantedPayment).when(paymentRepository).getPayment(wantedPayment.getId());
 
         assertEquals(wantedPayment, paymentService.getPayment(wantedPayment.getId()));
     }
@@ -191,6 +211,7 @@ public class PaymentServiceImplTest {
     @Test
     void testGetAllPayments() {
         doReturn(payments).when(paymentRepository).getAllPayments();
+
         List<Payment> allPayments = paymentService.getAllPayments();
 
         assertEquals(2, allPayments.size());

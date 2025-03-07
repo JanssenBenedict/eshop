@@ -34,15 +34,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment setStatus(Payment payment, String status) {
         if (!PaymentStatus.contains(status)) {
-            throw new IllegalArgumentException("Invalid payment status: ");
+            throw new IllegalArgumentException();
         }
-        payment.setStatus(status);
-        if (status.equals(PaymentStatus.SUCCESS.getValue())) {
-            payment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
-        } else if (status.equals(PaymentStatus.REJECTED.getValue())) {
-            payment.getOrder().setStatus(OrderStatus.FAILED.getValue());
-        }
-        return payment;
+        return paymentRepository.setStatus(payment, status);
     }
 
 
